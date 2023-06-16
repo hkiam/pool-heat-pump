@@ -1,0 +1,13 @@
+{
+  "name": "Pool Heat Pump",
+  "apiVersion": "1.0.0",
+  "author": "maik Hofmann",
+  "version": "0.0.1",
+  "description": "decodes serial data",
+  "extensions": {
+    "Pool Heat Pump Decoder": {
+      "type": "HighLevelAnalyzer",
+      "entryPoint": "HighLevelAnalyzer.Hla"
+    }
+  }
+}
