@@ -2,6 +2,7 @@
 
 This project connects the pool heat pump which use a controller board with label CC120A V6.3 via mqtt in my home automation environment.
 
+![Pool Heat Pump](./assets/heatpump2.png)
 ![CC120A Board](./assets/board.jpg)
 
 
@@ -10,6 +11,15 @@ This project connects the pool heat pump which use a controller board with label
 
 You have to connect terminal connector ( 3 wires) from the CC120A Board to your ESP8266 by using a 5v  bidirectional level shifter. The 5v <-> 3.3v level shifter is mandatory because the esp8266 is not 5V tolerant, and the heatpump controller is not working with 3.3v.
 !!!attention!!!, the powerline supplies 18V, so you need a step down converter to realize 5v. 
+
+
+| Connector | Color | Description |
+|-----------|-------|-------------|
+|GND        | Yellow| Ground      |
+|DAT        | Blue  | 4.2V / 5V, RX/TC Line
+|VCC        | Brown | 18V!  |
+
+![Terminal Connector + Bypass](./assets/connector2.png)
 
 TODO: more infos and maybe  pictures of the schemantic and connections
 
@@ -259,3 +269,11 @@ Node-Red example to expose the mqtt interface of the heat pump as homekit-servic
     }
 ]
 ```
+
+
+# Pictures
+
+![Pool Heat Pump Wiring](./assets/wiring.png)
+
+
+![Pool Heat Pump Inside](./assets/inside.png)
