@@ -5,7 +5,7 @@ This project connects the pool heat pump which use a controller board with label
 ![Pool Heat Pump](./assets/heatpump2.png)
 
 BOARD LABEL: CC120A V6.3  
-![CC120A Board](./assets/board.PNG)
+![CC120A Board](./assets/board.png)
 
 
 
