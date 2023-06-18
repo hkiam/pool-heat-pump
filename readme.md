@@ -28,11 +28,17 @@ TODO: more infos and maybe  pictures of the schemantic and connections
 
 # Background & Reversing
 I have decoded the data using a picoscope oscilloscope und a salea logic analyzer clone. You can find my tools and more informations in the folder "investigation". 
-The decoded signal has some similarities th the nec ir protocol. There is a special startsequence and the bits are encoded by pulse length modulation.
+The decoded signal has some similarities th the nec ir protocol. There is a special startsequence and the bits are encoded by pulse length modulation:
+
+![Signal](./assets/analyzed.png)
+
+Current state of reversing the serial protocol:  
+Click: [Protocol and more](./investigation/protocol.md)
 
 
 # MQTT
-see mqtt.md
+Click: [MQTT Description](./mqtt.md)
+
 
 # Node-Red
 Node-Red example to expose the mqtt interface of the heat pump as homekit-service to control the pool heat pump via an apple device and the home app.

@@ -1,11 +1,8 @@
 
 
-
-
-# Status Device
-
-look at Page 13:  
+# Device Parameters
 https://www.schwimmbadbau24.de/mediafiles/PDF/brilix/waermepumpe_thp_brilix_anleitung.pdf  
+look at Page 13:  
 
 
 |Pos | Default | Min-Max | Description |
@@ -29,7 +26,7 @@ https://www.schwimmbadbau24.de/mediafiles/PDF/brilix/waermepumpe_thp_brilix_anle
 
 
 
-# Signal
+# Terminal Connector, Signals
 | Connector | Color | Description |
 |-----------|-------|-------------|
 |GND        | Yellow| Ground      |
@@ -37,6 +34,7 @@ https://www.schwimmbadbau24.de/mediafiles/PDF/brilix/waermepumpe_thp_brilix_anle
 |VCC        | Brown | 18V!  |
 
 ![Terminal Connector + Bypass](../assets/connector2.png)
+
 
 
 # MSG DD
