@@ -3,7 +3,9 @@
 This project connects the pool heat pump which use a controller board with label CC120A V6.3 via mqtt in my home automation environment.
 
 ![Pool Heat Pump](./assets/heatpump2.png)
-![CC120A Board](./assets/board.jpg)
+
+BOARD LABEL: CC120A V6.3  
+![CC120A Board](./assets/board.PNG)
 
 
 
