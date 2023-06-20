@@ -219,7 +219,10 @@ void sendFrame(u8 tag, u8 value){
     // Set on/off value
     sendframe[7] = (sendframe[7] & 0xBF) | (value>0?0x40:0);
     break;
+
+
   case 1:
+    // set mode
     /*
       00 01 02 03 04 05 06 07 08 09
       d2 0c 28 2d 07 0d a0 4c 9c fd    auto on
@@ -251,13 +254,10 @@ void sendFrame(u8 tag, u8 value){
     {
       return;
     }
-
-    // Set mode (TODO)
-    sendframe[7] = (sendframe[7] & 0xBF) | (value>0?0x40:0);
     break;  
   case 2:
     // Set target temperature
-    sendframe[8] = (value&0x80)|(value & 0x7F);
+    sendframe[8] = (sendframe[8]&0x80)|(value & 0x7F);
     break;
   default:
     return;
@@ -505,11 +505,10 @@ void publishMQTT(){
   // set the properties of the JSON document
   doc["power"] = (ctrlframe[7] & 0x40) == 0x40;
   
-
   if((ctrlframe[8] & 0x80) == 0x80){
     doc["mode"] = "auto";
   }
-  else if((ctrlframe[6]&0x20) == 0 ){
+  else if((ctrlframe[7]&0x20) == 0 ){
     doc["mode"] = "cool";
   }else{
     doc["mode"] = "heat";

@@ -256,17 +256,18 @@ int poolheater::sendFrame(byte * frame, unsigned int timeout){
                         bool bitvalue = (frame[j]>>k)&1;
 
                         // Send the appropriate space length based on the bit value
-                        delayMicroseconds(bitvalue?space_one_length:space_zero__length);
                         digitalWrite(SENDPIN, HIGH);
+                        delayMicroseconds(bitvalue?space_one_length:space_zero__length);
+                        
                     }                                    
                 }
 
                 // Send the ending pulse
                 digitalWrite(SENDPIN, LOW);         
                 delayMicroseconds(pulse_length);
-                digitalWrite(SENDPIN, HIGH);
 
                 // Delay before sending the next repetition
+                digitalWrite(SENDPIN, HIGH);
                 delayMicroseconds(REPEAT_DELAY_US);
             }
 
