@@ -55,6 +55,17 @@ PubSubClient client(espClient);
 poolheater heater;
 ESP8266WebServer *otaserver = NULL;
 
+
+// Set up custom parameters for MQTT server, port, user, and password
+WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
+WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
+WiFiManagerParameter custom_mqtt_user("user", "mqtt user", mqtt_user, 20);
+WiFiManagerParameter custom_mqtt_pass("pass", "mqtt pass", mqtt_pass, 20);
+
+// Add custom parameters to WiFiManager
+WiFiManager wifiManager;
+
+
 bool rawmode = false;
 
 // stores the last received DD frame (temperatures)
@@ -361,6 +372,46 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
+
+void checkButton(){
+  if(digitalRead(D5)==LOW){
+      delay(3000); // reset delay hold
+      if(digitalRead(D5)==LOW){
+        Serial.println("reset config and reboot...");
+        wifiManager.resetSettings();
+        delay(2000);
+        ESP.restart(); 
+      }
+
+      if (otaserver!=NULL) {
+        otaserver->stop();
+        otaserver = NULL;
+      }
+
+      Serial.println("Starting config portal");
+      wifiManager.setConfigPortalTimeout(120);
+      
+      if (!wifiManager.startConfigPortal(autoconnect_ap_name)) {
+        Serial.println("failed to connect or hit timeout");
+        delay(3000);
+        // ESP.restart();
+      } else {
+        //if you get here you have connected to the WiFi
+        Serial.println("connected...yeey :)");
+        // Read updated MQTT parameters
+        strcpy(mqtt_server, custom_mqtt_server.getValue());
+        strcpy(mqtt_port, custom_mqtt_port.getValue());
+        strcpy(mqtt_user, custom_mqtt_user.getValue());
+        strcpy(mqtt_pass, custom_mqtt_pass.getValue());
+
+        // Save configuration if needed
+        if (shouldSaveConfig) {
+          saveConfiguration();
+        }  
+      }        
+  }
+}
+
 //#####################################################################################################
 /**
  * Initializes the WiFiManager and sets up custom parameters for MQTT server, port, user, and password.
@@ -370,14 +421,6 @@ void mqtt_callback(char* topic, byte* payload, unsigned int length) {
  * Initializes an OTAServer and an HTTP server.
  */
 void initWiFiManager() {
-  // Set up custom parameters for MQTT server, port, user, and password
-  WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
-  WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
-  WiFiManagerParameter custom_mqtt_user("user", "mqtt user", mqtt_user, 20);
-  WiFiManagerParameter custom_mqtt_pass("pass", "mqtt pass", mqtt_pass, 20);
-
-  // Add custom parameters to WiFiManager
-  WiFiManager wifiManager;
   wifiManager.addParameter(&custom_mqtt_server);
   wifiManager.addParameter(&custom_mqtt_port);
   wifiManager.addParameter(&custom_mqtt_user);
@@ -385,16 +428,11 @@ void initWiFiManager() {
 
   // Check if D5 pin is pulled LOW, and reset WiFiManager settings and reboot ESP if it is
   pinMode(D5, INPUT_PULLUP);
-  if(digitalRead(D5)==LOW){
-    Serial.println("reset config and reboot...");
-    wifiManager.resetSettings();
-    delay(2000);
-    ESP.reset(); 
-  }
+  checkButton();
 
   // Attempt to auto-connect to WiFi, reset ESP if connection fails
   if (!wifiManager.autoConnect(autoconnect_ap_name)) {
-    Serial.println("failed to connect and hit timeout");
+    Serial.println("failed to connect and hit timeout");    
     delay(3000);    
     ESP.reset();    
   }
@@ -440,7 +478,7 @@ void initMQTT() {
  * in case the connection is lost
  */
 void reconnectMQTT() {  
-  while (!client.connected()) { // Keep trying to connect until connection is established
+  if (!client.connected()) { // Keep trying to connect until connection is established
     Serial.print("Attempting MQTT connection...");
     if((strlen(mqtt_user) > 0 && strlen(mqtt_pass) > 0 && client.connect(mqtt_name, mqtt_user, mqtt_pass))
         || client.connect(mqtt_name)){ // Try to connect with username and password, if provided
@@ -532,9 +570,12 @@ void publishMQTT(){
 void loop() {
   byte frame[10]; // = {0xcc,0x0c,0x1c,0x2d,0x07,0x0d,0xa0,0x4c,0x9d,0xf2};  
 
+  checkButton();
+
   // Check if MQTT client is not connected and reconnect if necessary
   if (!client.connected()) {
     reconnectMQTT();
+    return;
   }
 
   // Handle incoming MQTT messages
@@ -589,7 +630,7 @@ void loop() {
   }
 
   // Handle OTA updates if OTA server is enabled
-  if (otaserver) {
+  if (otaserver!=NULL) {
     otaserver->handleClient();
   }
 }
