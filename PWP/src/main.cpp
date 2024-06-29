@@ -554,6 +554,8 @@ void publishMQTT(){
   
   doc["temp_in"] = tempframe[1];
   doc["temp_out"] = tempframe[2];
+  doc["temp_ambient"] = tempframe[5];
+  doc["errorcode"] = tempframe[7];
   doc["temp_target"] = ctrlframe[8] & 0x7F;
   doc["wifi_rssi"] = WiFi.RSSI();
   doc["timestamp"] = timestampoffset + (millis()/1000);

@@ -40,6 +40,7 @@ look at Page 13:
 # MSG DD
 Temperatures ?  
 Direction: Device -> Terminal  
+```code
 dd 15 15 0d 00 11 00 00 00 48  
 |  |  |  |  |  |  |  |  |  |  
 |  |  |  |  |  |  |  |  |   - Checksum  
@@ -52,43 +53,48 @@ dd 15 15 0d 00 11 00 00 00 48
 |  |   -   outlet water temp  
 |   - inlet water temp  
  -  
-
+```
 
 
 # MSG CA
 Initial Msg, register Terminal?  
 Direction: Terminal -> Device  
+```code
 ca ca ca ca ca ca ca ca ca 50   
- 
+```
+
 # MSG CC
 set new state  
 Direction: Terminal -> Device   
-                   
+```code                   
 cc 0c 1c 2d 07 0d a0 4c 9c f1  
                      |   | |  
                      |   |  - Checksum  
                      |    - auto mode + Targettemperature 1c   
                       - On/Off, heat mode?  
-
+```
 # MSG D2  
 Status Device  
 Direction: Device -> Terminal  
 see: msg cc  
+```code
 d2 0c 1c 2d 07 0d a0 4c 9c f1   
+```
 
 
 
 
 # Checksum
+```code
    XX XX XX XX XX XX XX XX CC  
 d2 0c 1c 2d 07 0d a0 0c 9c b1  
 
 CC = SUM(XX)&0xFF  
-
+```
 
 # Samples
 
-
+```code
 d20c282d070da04c9cfd    auto on  
 d20c282d070da04c1c7d    cool on  
 d20c282d070da06c1c9d    heat on  
@@ -159,6 +165,7 @@ dd 19 19 0f 00 15 00 00 00 56 : 1
 dd 19 19 0d 00 15 00 00 00 54 : 1  
 dd 19 19 0c 00 15 00 00 00 53 : 1  
 dd 19 19 09 00 15 00 00 00 50 : 1  
+```
 
 # some Manuals 
 
